@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DDEFA02B219BF02A00491178 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DDEFA02A219BF02A00491178 /* main.cpp */; };
+		DDEFA040219BF07E00491178 /* tensor_tnna.inc in Sources */ = {isa = PBXBuildFile; fileRef = DDEFA03E219BF07E00491178 /* tensor_tnna.inc */; };
+		DDEFA042219BF09600491178 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DDEFA041219BF09600491178 /* main.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +25,20 @@
 
 /* Begin PBXFileReference section */
 		DDEFA027219BF02A00491178 /* TNNA */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TNNA; sourceTree = BUILT_PRODUCTS_DIR; };
-		DDEFA02A219BF02A00491178 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		DDEFA031219BF07C00491178 /* tensor_tnna.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tensor_tnna.h; sourceTree = "<group>"; };
+		DDEFA032219BF07C00491178 /* transmit_tnna.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = transmit_tnna.h; sourceTree = "<group>"; };
+		DDEFA033219BF07C00491178 /* active_tnna.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = active_tnna.h; sourceTree = "<group>"; };
+		DDEFA034219BF07D00491178 /* cell_tnna.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cell_tnna.h; sourceTree = "<group>"; };
+		DDEFA035219BF07D00491178 /* object_tnna.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = object_tnna.h; sourceTree = "<group>"; };
+		DDEFA036219BF07D00491178 /* graph_tnna.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = graph_tnna.h; sourceTree = "<group>"; };
+		DDEFA038219BF07D00491178 /* iostream_tnna.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iostream_tnna.h; sourceTree = "<group>"; };
+		DDEFA039219BF07D00491178 /* kernel_tnna.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kernel_tnna.h; sourceTree = "<group>"; };
+		DDEFA03A219BF07D00491178 /* status_tnna.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = status_tnna.h; sourceTree = "<group>"; };
+		DDEFA03B219BF07D00491178 /* tnna.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tnna.h; sourceTree = "<group>"; };
+		DDEFA03C219BF07D00491178 /* value_tnna.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = value_tnna.h; sourceTree = "<group>"; };
+		DDEFA03D219BF07E00491178 /* autodiff_tnna.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = autodiff_tnna.h; sourceTree = "<group>"; };
+		DDEFA03E219BF07E00491178 /* tensor_tnna.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = tensor_tnna.inc; sourceTree = "<group>"; };
+		DDEFA041219BF09600491178 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +71,20 @@
 		DDEFA029219BF02A00491178 /* TNNA */ = {
 			isa = PBXGroup;
 			children = (
-				DDEFA02A219BF02A00491178 /* main.cpp */,
+				DDEFA041219BF09600491178 /* main.cpp */,
+				DDEFA033219BF07C00491178 /* active_tnna.h */,
+				DDEFA03D219BF07E00491178 /* autodiff_tnna.h */,
+				DDEFA034219BF07D00491178 /* cell_tnna.h */,
+				DDEFA036219BF07D00491178 /* graph_tnna.h */,
+				DDEFA038219BF07D00491178 /* iostream_tnna.h */,
+				DDEFA039219BF07D00491178 /* kernel_tnna.h */,
+				DDEFA035219BF07D00491178 /* object_tnna.h */,
+				DDEFA03A219BF07D00491178 /* status_tnna.h */,
+				DDEFA031219BF07C00491178 /* tensor_tnna.h */,
+				DDEFA03E219BF07E00491178 /* tensor_tnna.inc */,
+				DDEFA03B219BF07D00491178 /* tnna.h */,
+				DDEFA032219BF07C00491178 /* transmit_tnna.h */,
+				DDEFA03C219BF07D00491178 /* value_tnna.h */,
 			);
 			path = TNNA;
 			sourceTree = "<group>";
@@ -119,7 +146,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DDEFA02B219BF02A00491178 /* main.cpp in Sources */,
+				DDEFA042219BF09600491178 /* main.cpp in Sources */,
+				DDEFA040219BF07E00491178 /* tensor_tnna.inc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -233,6 +261,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -241,6 +270,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
