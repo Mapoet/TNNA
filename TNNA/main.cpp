@@ -15,8 +15,8 @@ int main(int argc, const char * argv[]) {
 	typedef tensor<double> Tensor;
 	//	typedef double Tensor;
 #define initTensor(x,type)   Tensor({5,5}, x, type)
-#define initRandom			 initTensor(1.0,1)
-	double rate = 0.005;
+#define initRandom			 initTensor(1.0/std::sqrt(7.0),0)
+	double rate = 0.05;
 	typedef point<3, double> Geometry;
 	typedef graph <double, Tensor, Geometry > Graph;
 	Graph gs;
@@ -48,7 +48,6 @@ int main(int argc, const char * argv[]) {
 	}
 	size_t nbat = 30;
 	gs.StartCell(nbat, msec(15));
-	gs.LearningStatus(cellStatus_Alived);
 
 	tensor<Tensor> xdata({ 1, nbat }, {});
 	tensor<Tensor> ydata({ 1, nbat }, {});
@@ -61,26 +60,23 @@ int main(int argc, const char * argv[]) {
 			xdata[{0, j}] = initTensor(1.0, 1);
 			ydata[{0, j}] = a + b*xdata[{0, j}];
 		}
-		gs.Learning(xdata, ydata, msec(300));
+		gs.Learning(xdata, ydata,false, msec(1000));
 	}
 	std::chrono::steady_clock::time_point et = std::chrono::steady_clock::now();
 	gs.print(std::cout);
-	gs.LearningStatus(cellStatus_Dead);
-	//nbat=400;
-	//gs.ReSetBat(nbat);
+	nbat=50;
+	gs.ReSetBat(nbat);
 	xdata.resize({1, nbat});
 	ydata.resize({1, nbat});
-	gs.ThinkingStatus(cellStatus_Alived);
 	for (size_t j = 0; j < nbat; j++){
 		xdata[{0, j}] = initTensor(1.0, 1);
 		ydata[{0, j}] = a + b*xdata[{0, j}];
 	}
 	tensor<Tensor> rdata;
 	std::chrono::steady_clock::time_point sl = std::chrono::steady_clock::now();
-	gs.Thinking(xdata, rdata, msec(300));
+	gs.Thinking(xdata, rdata,false, msec(1000));
 	std::chrono::steady_clock::time_point el = std::chrono::steady_clock::now();
 	std::cout << "final:\n" << ydata - rdata<<std::endl;
-	gs.ThinkingStatus(cellStatus_Dead);
 	std::cout << "Learning:" << std::chrono::duration_cast<std::chrono::milliseconds>(et - st).count() / 1e3 << std::endl;
 	std::cout << "Thinking:" << std::chrono::duration_cast<std::chrono::milliseconds>(el - sl).count() / 1e3 << std::endl;
 	return 0;
