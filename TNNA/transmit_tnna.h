@@ -23,11 +23,13 @@ namespace TNNA{
 		virtual void print(std::ostream&ios) = 0;
     };
 	template<typename Scale, typename Flow>
-	class FunctionalTransmit :public transmit<Scale, Flow>{
-	protected:
-		typedef std::shared_ptr<kernel<Flow>>   Kernel;
-		std::valarray<Flow>                      _args;
-		std::shared_ptr<kernel<Flow>>			_kers;
+	class FunctionalTransmit :public transmit<Scale, Flow>
+	{
+	  public:
+		typedef std::shared_ptr<kernel<Flow>> Kernel;
+	  protected:
+		std::valarray<Flow> _args;
+		Kernel _kers;
 		FunctionalTransmit(const Scale&rate = 0.1, const Kernel&kers = linearKernel<Flow>::New(), const std::valarray<Flow>&args = std::valarray<Flow>(2)) :transmit<Scale,Flow>(rate),_kers(kers), _args(args){}
 	public:
 		static std::shared_ptr<transmit<Scale, Flow>> New(const Scale&rate = 0.1, const Kernel&kers = linearKernel<Flow>::New(), const std::valarray<Flow>& args = std::valarray<Flow>(2)){
@@ -71,7 +73,7 @@ namespace TNNA{
 				argsin[_args.size()]._val = inputs[{n}];
 				argsout = _kers->apply(1, 1, argsin);
 				outerr[{n}] = outputs[{n}] -argsout[0]._val;
-				dydx({ { 1, n } }, argsout[0]._dval);
+				dydx(std::map<size_t,size_t>({ { 1, n } }), argsout[0]._dval);
 			}
 			tensor<Flow> inerr({ nbat }, {});
 			// darg= rate*(dout/darg)'*outerr;
@@ -82,6 +84,7 @@ namespace TNNA{
 					_args[a] = _args[a] + rate*dydx[{a, n}] * outerr[{n}] ;
 				inerr[{n}] = dydx[{_args.size(), n}] * outerr[{n}];
 			}
+            /*
 			for (size_t a = 0; a < _args.size(); a++){
 				_args[a](_args[a]>1e3,tanh(_args[a]));
 				_args[a](_args[a] < -1e3,tanh(_args[a]));
@@ -95,6 +98,7 @@ namespace TNNA{
 				inerr[{n}](isnan(inerr[{n}]), 0.0);
 				inerr[{n}](isunnormal(inerr[{n}]), 0.0);
 			}
+             */
 			return inerr;
 		}
 		virtual void print(std::ostream&ios){

@@ -1,0 +1,20 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "bulid",
+            "type": "shell",
+            "command": "g++ -std=c++11 main.cpp -o tnna -lpthread -lm",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "test",
+            "type": "shell",
+            "command": "./tnna",
+            "group": "test"
+        }
+    ]
+}

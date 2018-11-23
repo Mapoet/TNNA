@@ -60,16 +60,17 @@ namespace TNNA{
 			std::random_device den;
 			std::mt19937 gen(den());
             std::uniform_real_distribution<Cell> uniform(Cell(-1.0),Cell(1.0));
+            std::normal_distribution<Cell>       normal(Cell(0.0),Cell(1.0));
             if(type/2==0)
             {
                 _val=std::valarray<Cell>(val,_num);
-				if (type % 2 == 1)for (size_t i = 0; i<_num; i++)_val[i] = _val[i]*uniform(gen);
+				if (type % 2 == 1)for (size_t i = 0; i<_num; i++)_val[i] = _val[i]*normal(gen);
             }
             else{
                 std::valarray<size_t> idxs(1,_shp.size());
                 _val.resize(_num);
                 for(size_t i=0;i<_shp.min();i++)
-                    _val[idxs2loc(idxs*i, _shp)]=val*(type%2==1?uniform(gen):Cell(1.0));
+                    _val[idxs2loc(idxs*i, _shp)]=val*(type%2==1?normal(gen):Cell(1.0));
             }
             
         }
@@ -371,6 +372,13 @@ namespace TNNA{
                 val[i] = tanh(a._val[i]);
             return tensor<Cell>(a._shp, val);
         }
+        friend tensor<Cell>sqrt(const tensor<Cell> & a){
+            using namespace std;
+            std::valarray<Cell> val(a._num);
+            for (size_t i = 0; i < a._num; i++)
+                val[i] = sqrt(a._val[i]);
+            return tensor<Cell>(a._shp, val);
+        }
         friend tensor<Cell> log(const tensor<Cell> &a)
         {
             using namespace std;
@@ -630,7 +638,7 @@ namespace TNNA{
             tensor<Cell> rt;
             return rt;
         }
-#include "tensor_tnna.inc"
+#include "tensor_tnna.hpp"
     };
 }
 #endif /* tensor_h */

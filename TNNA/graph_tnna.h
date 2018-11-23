@@ -25,8 +25,9 @@ namespace TNNA{
 		typedef std::shared_ptr<value<Data>>          Value;
 		typedef std::vector<std::tuple<Value, Active>> Nodes;
 		typedef std::vector<std::tuple<size_t, size_t,Transmit>> Links;
-		typedef std::vector<std::tuple<cellStreamType,size_t, IOStream>> LabelIOStream;
-    private:
+        typedef std::vector<std::tuple<cellStreamType, size_t, IOStream>> LabelIOStream;
+        typedef std::shared_ptr<graph<Scale, Flow, Data> > GRAPH;
+      private:
 		size_t										_nbat;
 		std::vector<typename Node::Node>			_nodes;
 		std::map<Node*, IOStream >					_istrs,_ostrs;
@@ -60,12 +61,28 @@ namespace TNNA{
                 os(slice({ { 0, i++ } }), it->second->fresh().data());
             }
         }
-    public:
-        graph():_msleep(100),_nbat(1){}
-		~graph(){
-			_nodes.clear();
-			_istrs.clear();
-			_ostrs.clear();
+        graph() : _msleep(100), _nbat(1) {}
+      public:
+      static typename Node::Node Generate(graph *root, const Value &value, const Active &active)
+      {
+            auto node = Node::New(root, value, active);
+            root->_nodes.emplace_back(node);
+            return node;
+      }
+      static typename Node::Node Generate(graph *root, const Data &data, const typename FunctionalActive<Scale, Flow>::Kernel &kernel,const std::valarray<Flow>&args)
+      {
+          auto node=Node::New(root, DataValue<Data>::New(data), FunctionalActive<Scale,Flow>::New(Scale(0.1),kernel,args));
+          root->_nodes.emplace_back(node);
+          return node;
+      }
+      static GRAPH New(){
+          return GRAPH(new graph<Scale,Flow,Data>());
+      }
+      ~graph()
+      {
+          _nodes.clear();
+          _istrs.clear();
+          _ostrs.clear();
 		}
 		void print(std::ostream&ios){
 			ios << "graph:{nbat:"<<_nbat<<",cells:{\n";
@@ -139,7 +156,7 @@ namespace TNNA{
             for (size_t i = 0; i < _nodes.size(); i++)
                 std::get<0>(_nodes[i]->_living).Resume();
 		}
-		typename Node::Node operator[](const size_t& i){ return _nodes[i]; }
+		typename Node::Node Get(const size_t& i){ assert(i<_nodes.size());return _nodes[i]; }
 	};
 }
 

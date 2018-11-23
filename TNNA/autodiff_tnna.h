@@ -9,6 +9,7 @@
 #ifndef autodiff_tnna_h
 #define autodiff_tnna_h
 #include <valarray>
+#include "tensor_tnna.h"
 namespace TNNA{
     template<class Cell>
     struct autodiff{
@@ -154,15 +155,15 @@ namespace TNNA{
     template<class Cell>
     autodiff<Cell> sin(const autodiff<Cell>& a){
         autodiff<Cell> v;
-        v._val = std::sin(a._val);
-        v._dval = std::cos(a._val)*a._dval;
+        v._val = sin(a._val);
+        v._dval = cos(a._val)*a._dval;
         return v;
     }
     template<class Cell>
     autodiff<Cell> cos(const autodiff<Cell>& a){
         autodiff<Cell> v;
-        v._val = std::cos(a._val);
-        v._dval = -std::sin(a._val)*a._dval;
+        v._val = cos(a._val);
+        v._dval = -sin(a._val)*a._dval;
         return v;
     }
     template<class Cell>
@@ -180,20 +181,22 @@ namespace TNNA{
 	template<class Cell>
 	autodiff<Cell> asin(const autodiff<Cell>& a){
 		autodiff<Cell> v;
-		v._val = std::sin(a._val);
-		v._dval = std::cos(a._val)*a._dval;
+		v._val = asin(a._val);
+		v._dval = 1.0/sqrt((1.0-a._val*a._val))*a._dval;
 		return v;
 	}
 	template<class Cell>
 	autodiff<Cell> acos(const autodiff<Cell>& a){
 		autodiff<Cell> v;
-		v._val = std::cos(a._val);
-		v._dval = -std::sin(a._val)*a._dval;
+		v._val = acos(a._val);
+		v._dval = -1.0/sqrt((1.0-a._val*a._val))*a._dval;
 		return v;
 	}
 	template<class Cell>
 	autodiff<Cell> atan(const autodiff<Cell>& a){
-		autodiff<Cell> v = sin(a) / cos(a);
+        autodiff<Cell> v;
+        v._val = atan(a._val);
+        v._dval = -1.0/(a._val*a._val+1.0)*a._dval;
 		return v;
 	}
 	template<class Cell>

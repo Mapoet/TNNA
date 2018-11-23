@@ -30,14 +30,16 @@ namespace TNNA{
 		virtual void print(std::ostream&ios) = 0;
     };
     template<typename Scale,typename Flow>
-	class FunctionalActive :public active<Scale, Flow>{
-    protected:
-		typedef std::shared_ptr<kernel<Flow>>   Kernel;
-		std::vector<Flow>						_args;
-		std::shared_ptr<kernel<Flow>>			_kers;
-		FunctionalActive(const Scale&rate = 0.1, const Kernel&kers = linearKernel<Flow>::New(), const std::vector<Flow>& args = std::vector<Flow>(2)) :active<Scale, Flow>(rate), _kers(kers), _args(args){}
+	class FunctionalActive :public active<Scale, Flow>
+	{
+	public:
+		typedef std::shared_ptr<kernel<Flow>> Kernel;
+	protected:
+		std::valarray<Flow>						_args;
+		Kernel                                  _kers;
+		FunctionalActive(const Scale&rate = 0.1, const Kernel&kers = linearKernel<Flow>::New(), const std::valarray<Flow>& args = std::valarray<Flow>(2)) :active<Scale, Flow>(rate), _kers(kers), _args(args){}
     public:
-		static std::shared_ptr<active<Scale, Flow>> New(const Scale&rate = 0.1, const Kernel&kers = linearKernel<Flow>::New(), const std::vector<Flow>&  args = std::vector<Flow>(2)){
+		static std::shared_ptr<active<Scale, Flow>> New(const Scale&rate = 0.1, const Kernel&kers = linearKernel<Flow>::New(), const std::valarray<Flow>&  args = std::valarray<Flow>(2)){
 			return std::shared_ptr<active<Scale, Flow>>(new FunctionalActive<Scale, Flow>(rate,kers, args));
 		}
 		virtual void	act(const size_t &itype, const size_t &otype, const size_t &nbat){
@@ -84,7 +86,7 @@ namespace TNNA{
 				for (size_t o = 0; o < otype;o++)
 				{
 					outerr[{  o, n  }] = this->_out[{o, n}] - argsout[o]._val;
-					dydx({ { 0, o }, { 2, n } }, argsout[o]._dval);
+					dydx(std::map<size_t,size_t>({ { 0, o }, { 2, n } }), argsout[o]._dval);
 				}
 			}
 			tensor<Flow> inerr({ itype, nbat }, std::valarray<Flow>(Flow(this->_in[{0, 0}].shape(), 0.0, 1), itype*nbat));
@@ -100,6 +102,7 @@ namespace TNNA{
 					inerr[{i, n}] = inerr[{i, n}] + dydx[{o, i + _args.size(), n}] * outerr[{o, n}];
 			}
 			this->_in = this->_in + inerr;
+            /*
 			for (size_t a = 0; a < _args.size(); a++){
 				_args[a](_args[a]>1e3, otype*tanh(_args[a]));
 				_args[a](_args[a] < -1e3, otype*tanh(_args[a]));
@@ -116,15 +119,17 @@ namespace TNNA{
 					this->_in[{i, n}](isunnormal(this->_in[{i, n}]), 0.0);
 				}
 			}
+            */
 			return outerr;
         }
 		virtual void print(std::ostream&ios){
 			ios << "active:{FunctionalActive,";
 			ios << "Rate:" << this->_rate << ",";
 			ios << "Args:{";
-			for (size_t i = 0; i < _args.size() - 1; i++)
+			for (int i = 0; i < (int)_args.size() - 1; i++)
 				ios << _args[i] << ",";
-			ios << _args[_args.size() - 1] << "};";
+            if(_args.size()>0)ios << _args[_args.size() - 1];
+            ios<< "};";
 			_kers->print(ios);
 			ios << "};";
 		}
