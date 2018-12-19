@@ -4,9 +4,16 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "bulid",
+            "label": "debug",
             "type": "shell",
-            "command": "g++ -std=c++11 main.cpp -o tnna -lpthread -lm",
+            "command": "g++ -std=c++11 main.cpp -o tnna -lpthread -lm -g",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "release",
+            "type": "shell",
+            "command": "g++ -std=c++11 main.cpp -o tnna -lpthread -lm -O3",
             "group": "build",
             "problemMatcher": []
         },

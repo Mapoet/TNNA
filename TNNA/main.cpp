@@ -16,7 +16,7 @@ int main(int argc, const char * argv[]) {
 	//	typedef double Tensor;
 #define initTensor(x,type)   Tensor({4,4}, x, type)
 #define initRandom			 initTensor(1.0/std::sqrt(7.0),0)
-	double rate = 0.05;
+	double rate = 0.005;
 	typedef point<3, double> Geometry;
 	typedef graph <double, Tensor, Geometry > Graph;
 	typedef std::shared_ptr<Graph > GRAPH;
@@ -63,28 +63,28 @@ argsout[i]=atan(argsout[i]);\
 }\
 return argsout;\
 }), { initRandom,initRandom,initRandom, initRandom,initRandom,initRandom, initRandom }))
-    
+#define weaklinear FunctionalActive<double, Tensor>::New(rate, weaklinearKernel<Tensor>::New(), { initRandom, initRandom })
 	GRAPH gs=Graph::New();
 	{
 		Graph::Nodes nodes;
 		Graph::Links links;
 		Graph::LabelIOStream ios;
 		nodes.emplace_back(DataValue <Geometry>::New(Geometry()), linear6);
-		nodes.emplace_back(DataValue <Geometry>::New(Geometry()), FunctionalActive<double, Tensor>::New(rate, weaklinearKernel<Tensor>::New(), { initRandom, initRandom }));
-		nodes.emplace_back(DataValue <Geometry>::New(Geometry()), FunctionalActive<double, Tensor>::New(rate, weaklinearKernel<Tensor>::New(), { initRandom, initRandom }));
-		nodes.emplace_back(DataValue <Geometry>::New(Geometry()), FunctionalActive<double, Tensor>::New(rate, weaklinearKernel<Tensor>::New(), { initRandom, initRandom }));
-        nodes.emplace_back(DataValue <Geometry>::New(Geometry()), FunctionalActive<double, Tensor>::New(rate, weaklinearKernel<Tensor>::New(), { initRandom, initRandom }));
-        nodes.emplace_back(DataValue <Geometry>::New(Geometry()), FunctionalActive<double, Tensor>::New(rate, weaklinearKernel<Tensor>::New(), { initRandom, initRandom }));
-        nodes.emplace_back(DataValue <Geometry>::New(Geometry()), FunctionalActive<double, Tensor>::New(rate, weaklinearKernel<Tensor>::New(), { initRandom, initRandom }));
-        nodes.emplace_back(DataValue <Geometry>::New(Geometry()), FunctionalActive<double, Tensor>::New(rate, weaklinearKernel<Tensor>::New(), { initRandom, initRandom }));
-        nodes.emplace_back(DataValue <Geometry>::New(Geometry()), FunctionalActive<double, Tensor>::New(rate, weaklinearKernel<Tensor>::New(), { initRandom, initRandom }));
-        nodes.emplace_back(DataValue <Geometry>::New(Geometry()), FunctionalActive<double, Tensor>::New(rate, weaklinearKernel<Tensor>::New(), { initRandom, initRandom }));
-        nodes.emplace_back(DataValue <Geometry>::New(Geometry()), FunctionalActive<double, Tensor>::New(rate, weaklinearKernel<Tensor>::New(), { initRandom, initRandom }));
-        nodes.emplace_back(DataValue <Geometry>::New(Geometry()), FunctionalActive<double, Tensor>::New(rate, weaklinearKernel<Tensor>::New(), { initRandom, initRandom }));
-        nodes.emplace_back(DataValue <Geometry>::New(Geometry()), FunctionalActive<double, Tensor>::New(rate, weaklinearKernel<Tensor>::New(), { initRandom, initRandom }));
-        nodes.emplace_back(DataValue <Geometry>::New(Geometry()), FunctionalActive<double, Tensor>::New(rate, weaklinearKernel<Tensor>::New(), { initRandom, initRandom }));
-        nodes.emplace_back(DataValue <Geometry>::New(Geometry()), FunctionalActive<double, Tensor>::New(rate, weaklinearKernel<Tensor>::New(), { initRandom, initRandom }));
-        nodes.emplace_back(DataValue <Geometry>::New(Geometry()), FunctionalActive<double, Tensor>::New(rate, weaklinearKernel<Tensor>::New(), { initRandom, initRandom }));
+		nodes.emplace_back(DataValue <Geometry>::New(Geometry()), weaklinear);
+		nodes.emplace_back(DataValue <Geometry>::New(Geometry()), weaklinear);
+		nodes.emplace_back(DataValue <Geometry>::New(Geometry()), weaklinear);
+        nodes.emplace_back(DataValue <Geometry>::New(Geometry()), weaklinear);
+        nodes.emplace_back(DataValue <Geometry>::New(Geometry()), weaklinear);
+        nodes.emplace_back(DataValue <Geometry>::New(Geometry()), weaklinear);
+        nodes.emplace_back(DataValue <Geometry>::New(Geometry()), weaklinear);
+        nodes.emplace_back(DataValue <Geometry>::New(Geometry()), weaklinear);
+        nodes.emplace_back(DataValue <Geometry>::New(Geometry()), weaklinear);
+        nodes.emplace_back(DataValue <Geometry>::New(Geometry()), weaklinear);
+        nodes.emplace_back(DataValue <Geometry>::New(Geometry()), weaklinear);
+        nodes.emplace_back(DataValue <Geometry>::New(Geometry()), weaklinear);
+        nodes.emplace_back(DataValue <Geometry>::New(Geometry()), weaklinear);
+        nodes.emplace_back(DataValue <Geometry>::New(Geometry()), weaklinear);
+        nodes.emplace_back(DataValue <Geometry>::New(Geometry()), weaklinear);
         nodes.emplace_back(DataValue <Geometry>::New(Geometry()), alinear);
 		nodes.emplace_back(DataValue <Geometry>::New(Geometry()), alinear);
         // {0}->{1,2,3,4,5,6}
@@ -104,7 +104,7 @@ return argsout;\
         ios.emplace_back(cellStream_Output, 17, DataStream<Tensor>::New(initRandom));
 		gs->BuildStruct(nodes, links, ios);
 	}
-	size_t nbat = 50;
+	size_t nbat = 500;
 	gs->StartCell(nbat, msec(15));
 
 	tensor<Tensor> xdata({ 1, nbat }, {});
@@ -114,18 +114,18 @@ return argsout;\
     Tensor c = initTensor(0.6, 0);
     Tensor d = initTensor(0.4, 0);
 	std::chrono::steady_clock::time_point st = std::chrono::steady_clock::now();
-	for (int i = 0; i < 50; i++)
+	for (int i = 0; i < 100; i++)
 	{
 		for (size_t j = 0; j < nbat; j++){ 
 			xdata[{0, j}] = initTensor(1.0*j, 1);
 			ydata[{0, j}] = a + b*xdata[{0, j}];
             ydata[{1, j}] = c + d*xdata[{0, j}];
 		}
-		gs->Learning(xdata, ydata,false, msec(1000));
+		gs->Learning(xdata, ydata,false, msec(2000));
 	}
 	std::chrono::steady_clock::time_point et = std::chrono::steady_clock::now();
 	gs->print(std::cout);
-	nbat=50;
+	nbat=5;
 	gs->ReSetBat(nbat);
 	xdata.resize({1, nbat});
 	ydata.resize({2, nbat});
@@ -137,9 +137,9 @@ return argsout;\
 	tensor<Tensor> rdata;
 	std::chrono::steady_clock::time_point sl = std::chrono::steady_clock::now();
 	gs->Thinking(xdata, rdata,false, msec(1000));
-	auto node = Graph::Generate(gs.get(), Geometry(), linearKernel<Tensor>::New(), {initRandom, initRandom});
-	gs->Get(0)->insertO(node, tlinear);
-    gs->print(std::cout);
+//	auto node = Graph::Generate(gs.get(), Geometry(), linearKernel<Tensor>::New(), {initRandom, initRandom});
+//	gs->Get(0)->insertO(node, tlinear);
+//    gs->print(std::cout);
 	std::chrono::steady_clock::time_point el = std::chrono::steady_clock::now();
 	std::cout << "final:\n" << ydata - rdata<<std::endl;
 	std::cout << "Learning:" << std::chrono::duration_cast<std::chrono::milliseconds>(et - st).count() / 1e3 << std::endl;
