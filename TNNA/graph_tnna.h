@@ -60,7 +60,27 @@ namespace TNNA{
                     os.resize({ _ostrs.size(), it->second->fresh().data().size() });
                 os(slice({ { 0, i++ } }), it->second->fresh().data());
             }
-        }
+        }	
+        void discell(typename Node::Self* self){		
+           for (auto it : self->_istr){
+				it.first->_ostr.erase(self);
+			}
+			for (auto it :self-> _ostr){
+				it.first->_ostr.erase(self);
+			}
+			{
+			    auto loc = _istrs.find(self);
+			    if (loc != _istrs.end())_istrs.erase(loc);
+			}
+			{
+			    auto loc = _ostrs.find(self);
+			    if (loc != _ostrs.end())_ostrs.erase(loc);
+			}
+			{
+			    auto loc = std::find_if(_nodes.begin(),_nodes.end(),[&](const typename Node::Node&node){return self==node.get();});
+			    if (loc != _nodes.end())_nodes.erase(loc);
+			}
+		}
         graph() : _msleep(100), _nbat(1) {}
       public:
       static typename Node::Node Generate(graph *root, const Value &value, const Active &active)
@@ -157,6 +177,15 @@ namespace TNNA{
                 std::get<0>(_nodes[i]->_living).Resume();
 		}
 		typename Node::Node Get(const size_t& i){ assert(i<_nodes.size());return _nodes[i]; }
+        typename Node::Node Remove(const size_t&i){
+            assert(i<_nodes.size());
+            auto node=_nodes[i];
+            if(node!=nullptr)this->discell(node.get());
+            return node;
+        }
+        void Remove(typename Node::Node&node){
+            if(node!=nullptr&&node->_root==this)this->discell(node.get());
+        }
 	};
 }
 

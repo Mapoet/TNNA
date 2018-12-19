@@ -97,7 +97,7 @@ namespace TNNA{
 			for (size_t o = 0; o < otype; o++)
 			{
 				for (size_t a = 0; a < _args.size(); a++)
-					_args[a] = _args[a] + rate*dydx[{o, a, n}] * outerr[{o, n}];
+					_args[a] = _args[a] + rate/nbat*dydx[{o, a, n}] * outerr[{o, n}];
 				for (size_t i = 0; i < itype; i++)
 					inerr[{i, n}] = inerr[{i, n}] + dydx[{o, i + _args.size(), n}] * outerr[{o, n}];
 			}

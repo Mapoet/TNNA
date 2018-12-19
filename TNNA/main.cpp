@@ -137,9 +137,10 @@ return argsout;\
 	tensor<Tensor> rdata;
 	std::chrono::steady_clock::time_point sl = std::chrono::steady_clock::now();
 	gs->Thinking(xdata, rdata,false, msec(1000));
-//	auto node = Graph::Generate(gs.get(), Geometry(), linearKernel<Tensor>::New(), {initRandom, initRandom});
-//	gs->Get(0)->insertO(node, tlinear);
-//    gs->print(std::cout);
+	auto node = Graph::Generate(gs.get(), Geometry(), linearKernel<Tensor>::New(), {initRandom, initRandom});
+	gs->Get(0)->insertO(node, tlinear);
+    gs->print(std::cout);
+	gs->Remove(node);
 	std::chrono::steady_clock::time_point el = std::chrono::steady_clock::now();
 	std::cout << "final:\n" << ydata - rdata<<std::endl;
 	std::cout << "Learning:" << std::chrono::duration_cast<std::chrono::milliseconds>(et - st).count() / 1e3 << std::endl;

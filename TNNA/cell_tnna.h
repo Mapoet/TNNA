@@ -190,14 +190,14 @@ namespace TNNA{
 			for (size_t j = 0; j < _root->_nbat; j++)
 				_active->out()[{ i, j }] = _active->out()[{ i, j }] + delta[{ j }];
 		}
-        void            clear(){
+        void clear(){
             std::lock_guard<std::timed_mutex> guard(std::get<2>(_living));
             _active->clear();
         }
     public:
-        static std::shared_ptr<cell<Scale,Flow,Data>>
+        static Node
 			New( const Root* root = nullptr, const Value&value = Value(), const Active&active = Active()){
-				return std::shared_ptr<cell<Scale, Flow, Data>>(new cell<Scale, Flow, Data>(root, value, active));
+				return Node(new Self(root, value, active));
 			}
         template<typename Vs,typename As>
 		static std::shared_ptr<cell<Scale, Flow, Data>>
@@ -206,12 +206,6 @@ namespace TNNA{
 		}
 		~cell(){
 			std::get<0>(_living).Alived(false);
-			//for (auto it : _istr){
-			//	it.first->_ostr.erase(this);
-			//}
-			//for (auto it : _ostr){
-			//	it.first->_istr.erase(this);
-			//}
 			if (std::get<1>(_living).joinable())
 				std::get<1>(_living).join();
 		}

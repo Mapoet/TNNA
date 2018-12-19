@@ -81,7 +81,7 @@ namespace TNNA{
 			Flow rate(inputs[{ 0 }].shape(), this->_rate, 0);
 			for (size_t n = 0; n < nbat; n++){
 				for (size_t a = 0; a < _args.size(); a++)
-					_args[a] = _args[a] + rate*dydx[{a, n}] * outerr[{n}] ;
+					_args[a] = _args[a] + rate/nbat*dydx[{a, n}] * outerr[{n}] ;
 				inerr[{n}] = dydx[{_args.size(), n}] * outerr[{n}];
 			}
             /*
