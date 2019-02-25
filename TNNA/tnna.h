@@ -14,6 +14,7 @@
 #include "tensor_tnna.h"
 #include "autodiff_tnna.h"
 #include "object_tnna.h"
+#include "field_tnna.h"
 #include "value_tnna.h"
 #include "active_tnna.h"
 #include "transmit_tnna.h"

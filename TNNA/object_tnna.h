@@ -10,7 +10,12 @@
 #define object_tnna_h
 namespace TNNA{
     template<int n, typename Scale>
-	struct point :public tensor<Scale>{
+    struct object{
+        public:
+        
+    };
+    template<int n, typename Scale>
+	struct point :public object<n,Scale>,public tensor<Scale>{
 		point(const Scale&s=Scale(1.0)) :tensor<Scale>({ n }, s, 1){}
     };
     

@@ -176,6 +176,13 @@ namespace TNNA{
             
             return true;
         }
+        Cell each(const size_t &loc)const{
+            return (int)loc==-1||loc>=_num?Cell():_val[loc];
+        }
+        Cell& each(const size_t &loc){
+            assert((int)loc!=-1);
+            return _val[loc];
+        }
         Cell operator[](const std::valarray<size_t> &idxs)const{
             size_t loc=idxs2loc(idxs,_shp);
             return (int)loc==-1||loc>=_num?Cell():_val[loc];

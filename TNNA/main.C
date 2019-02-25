@@ -7,7 +7,7 @@
 //
 
 #include "tnna.h"
-int main(int argc, const char * argv[]) {
+int main() {
 	// insert code here...
 	typedef std::chrono::milliseconds msec;
 	using namespace TNNA;
@@ -104,8 +104,8 @@ return argsout;\
         ios.emplace_back(cellStream_Output, 17, DataStream<Tensor>::New(initRandom));
 		gs->BuildStruct(nodes, links, ios);
 	}
-	size_t nbat = 500;
-	gs->StartCell(nbat, msec(10));
+	size_t nbat = 50;
+	gs->StartCell(nbat, msec(15));
 
 	tensor<Tensor> xdata({ 1, nbat }, {});
 	tensor<Tensor> ydata({ 2, nbat }, {});
@@ -114,7 +114,7 @@ return argsout;\
     Tensor c = initTensor(0.6, 0);
     Tensor d = initTensor(0.4, 0);
 	std::chrono::steady_clock::time_point st = std::chrono::steady_clock::now();
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		for (size_t j = 0; j < nbat; j++){ 
 			xdata[{0, j}] = initTensor(1.0*j, 1);
@@ -136,7 +136,7 @@ return argsout;\
 	}
 	tensor<Tensor> rdata;
 	std::chrono::steady_clock::time_point sl = std::chrono::steady_clock::now();
-	gs->Thinking(xdata, rdata,false, msec(2000));
+	gs->Thinking(xdata, rdata,false, msec(1000));
 	auto node = Graph::Generate(gs.get(), Geometry(), linearKernel<Tensor>::New(), {initRandom, initRandom});
 	gs->Get(0)->insertO(node, tlinear);
     gs->print(std::cout);
