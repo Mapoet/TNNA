@@ -6,7 +6,7 @@
 //  Copyright © 2018年 Mapoet Niphy. All rights reserved.
 //
 #include <fstream>
-#include "tnna.h"
+#include "TNNA/tnna.h"
 int main(int argc, const char * argv[]) {
 	// insert code here...
 	typedef std::chrono::milliseconds msec;
