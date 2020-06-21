@@ -209,6 +209,9 @@ namespace TNNA{
 			if (std::get<1>(_living).joinable())
 				std::get<1>(_living).join();
 		}
+		Data &data(){
+			return _value->data();
+		}
 		operator Value()const{
 			return _value;
 		}

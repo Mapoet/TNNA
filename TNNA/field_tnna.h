@@ -27,9 +27,9 @@ namespace TNNA{
     */
     template<int n, typename Scale>
     struct field:public object<n,Scale>{
-        std::valarray<valarray<Scale> > _axis;
+        std::valarray<std::valarray<Scale> > _axis;
         tensor<Scale> _data;
-        field(const  std::valarray<valarray<Scale> >&axis):_axis(axis){
+        field(const  std::valarray<std::valarray<Scale> >&axis):_axis(axis){
              std::valarray<size_t> dim(_axis.size());
              for(size_t i=0;i<dim.size();i++)dim[i]=_axis[i].size();
             _data.resize(dim);
@@ -46,17 +46,17 @@ namespace TNNA{
             for(size_t iz=0;iz<_axis[2].size();iz++)
             switch (id)
             {
-                case 1:if(ix==0)r[{ix,iy,iz}]= (_data[{ix+1,iy,iz}]-_data[{ix,iy,iz}])/(_axis[0][i+1]-_axis[0][i]);
-                        else if(ix==_axis[0].size()-1)r[{ix,iy,iz}]= (_data[{ix,iy,iz}]-_data[{ix-1,iy,iz}])/(_axis[0][i]-_axis[0][i-1]);
-                        else r[{ix,iy,iz}]= (_data[{ix+1,iy,iz}]-_data[{ix-1,iy,iz}])/(_axis[0][i+1]-_axis[0][i-1]);
+                case 1:if(ix==0)r[{ix,iy,iz}]= (_data[{ix+1,iy,iz}]-_data[{ix,iy,iz}])/(_axis[0][ix+1]-_axis[0][ix]);
+                        else if(ix==_axis[0].size()-1)r[{ix,iy,iz}]= (_data[{ix,iy,iz}]-_data[{ix-1,iy,iz}])/(_axis[0][ix]-_axis[0][ix-1]);
+                        else r[{ix,iy,iz}]= (_data[{ix+1,iy,iz}]-_data[{ix-1,iy,iz}])/(_axis[0][ix+1]-_axis[0][ix-1]);
                     break;
-                case 2:if(ix==0)r[{ix,iy,iz}]= (_data[{ix,iy+1,iz}]-_data[{ix,iy,iz}])/(_axis[1][i+1]-_axis[1][i]);
-                        else if(ix==_axis[1].size()-1)r[{ix,iy,iz}]= (_data[{ix,iy,iz}]-_data[{ix,iy-1,iz}])/(_axis[1][i]-_axis[1][i-1]);
-                        else r[{ix,iy,iz}]= (_data[{ix,iy+1,iz}]-_data[{ix,iy-1,iz}])/(_axis[1][i+1]-_axis[1][i-1]);
+                case 2:if(ix==0)r[{ix,iy,iz}]= (_data[{ix,iy+1,iz}]-_data[{ix,iy,iz}])/(_axis[1][iy+1]-_axis[1][iy]);
+                        else if(ix==_axis[1].size()-1)r[{ix,iy,iz}]= (_data[{ix,iy,iz}]-_data[{ix,iy-1,iz}])/(_axis[1][iy]-_axis[1][iy-1]);
+                        else r[{ix,iy,iz}]= (_data[{ix,iy+1,iz}]-_data[{ix,iy-1,iz}])/(_axis[1][iy+1]-_axis[1][iy-1]);
                     break;
-                case 3:if(ix==0)r[{ix,iy,iz}]= (_data[{ix,iy,iz+1}]-_data[{ix,iy,iz}])/(_axis[2][i+1]-_axis[2][i]);
-                        else if(ix==_axis[2].size()-1)r[{ix,iy,iz}]= (_data[{ix,iy,iz}]-_data[{ix,iy,iz-1}])/(_axis[2][i]-_axis[2][i-1]);
-                        else r[{ix,iy,iz}]= (_data[{ix,iy,iz+1}]-_data[{ix,iy,iz-1}])/(_axis[2][i+1]-_axis[2][i-1]);
+                case 3:if(ix==0)r[{ix,iy,iz}]= (_data[{ix,iy,iz+1}]-_data[{ix,iy,iz}])/(_axis[2][iz+1]-_axis[2][iz]);
+                        else if(ix==_axis[2].size()-1)r[{ix,iy,iz}]= (_data[{ix,iy,iz}]-_data[{ix,iy,iz-1}])/(_axis[2][iz]-_axis[2][iz-1]);
+                        else r[{ix,iy,iz}]= (_data[{ix,iy,iz+1}]-_data[{ix,iy,iz-1}])/(_axis[2][iz+1]-_axis[2][iz-1]);
                     break;
                 default:
                     break;

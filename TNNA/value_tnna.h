@@ -18,6 +18,8 @@ namespace TNNA{
 		Data _data;
 		value(const Data&data = Data()) :_data(data){}
 		virtual void print(std::ostream&ios) = 0;
+		public:
+		Data& data(){return _data;}
     };
 	template<typename Data>
 	class DataValue :public value<Data>{

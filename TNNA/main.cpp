@@ -5,7 +5,7 @@
 //  Created by Mapoet Niphy on 2018/11/2.
 //  Copyright © 2018年 Mapoet Niphy. All rights reserved.
 //
-
+#include <fstream>
 #include "tnna.h"
 int main(int argc, const char * argv[]) {
 	// insert code here...
@@ -19,7 +19,7 @@ int main(int argc, const char * argv[]) {
 	double rate = 0.005;
 	typedef point<3, double> Geometry;
 	typedef graph <double, Tensor, Geometry > Graph;
-	typedef std::shared_ptr<Graph > GRAPH;
+	
 
 #define tlinear (FunctionalTransmit<double, Tensor>::New(rate, functionKernel<Tensor>::New("tlinear",\
 [](const size_t&itype, const size_t&otype, const std::valarray<autodiff<Tensor>>& argsin){\
@@ -64,7 +64,7 @@ argsout[i]=atan(argsout[i]);\
 return argsout;\
 }), { initRandom,initRandom,initRandom, initRandom,initRandom,initRandom, initRandom }))
 #define weaklinear FunctionalActive<double, Tensor>::New(rate, weaklinearKernel<Tensor>::New(), { initRandom, initRandom })
-	GRAPH gs=Graph::New();
+	Graph::GRAPH gs=Graph::New();
 	{
 		Graph::Nodes nodes;
 		Graph::Links links;
@@ -114,7 +114,7 @@ return argsout;\
     Tensor c = initTensor(0.6, 0);
     Tensor d = initTensor(0.4, 0);
 	std::chrono::steady_clock::time_point st = std::chrono::steady_clock::now();
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 200; i++)
 	{
 		for (size_t j = 0; j < nbat; j++){ 
 			xdata[{0, j}] = initTensor(1.0*j, 1);
@@ -138,10 +138,13 @@ return argsout;\
 	std::chrono::steady_clock::time_point sl = std::chrono::steady_clock::now();
 	gs->Thinking(xdata, rdata,false, msec(2000));
 	auto node = Graph::Generate(gs.get(), Geometry(), linearKernel<Tensor>::New(), {initRandom, initRandom});
+	node->data()[{0}]=0.2;
+	node->data()[{1}]=0.3;
 	gs->Get(0)->insertO(node, tlinear);
-    gs->print(std::cout);
+	std::ofstream out("test.dat");
+    gs->print(out);
+	out.close();
 	gs->Remove(node);
-	
 	
 	
 	std::chrono::steady_clock::time_point el = std::chrono::steady_clock::now();

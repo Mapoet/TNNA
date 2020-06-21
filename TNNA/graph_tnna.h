@@ -109,7 +109,6 @@ namespace TNNA{
 			for (auto it : _nodes)
 				it->print(ios);
 			ios << "}.\n";
-
 		}
 		void  BuildStruct(const Nodes &cells, const Links&links, const LabelIOStream&streams){
 			for (auto it : cells)
