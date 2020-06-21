@@ -645,7 +645,6 @@ namespace TNNA{
             tensor<Cell> rt;
             return rt;
         }
-#include "tensor_tnna.hpp"
     };
 }
 #endif /* tensor_h */
